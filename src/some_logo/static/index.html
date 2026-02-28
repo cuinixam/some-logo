@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Some Logo Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main class="app-container">
+        <aside class="sidebar">
+            <h1 class="logo-title">Some Logo<span class="dot">.</span></h1>
+            <p class="subtitle">Quickly generate geometric logos parametrically.</p>
+
+            <form id="logoForm" class="options-form">
+                <div class="input-group">
+                    <label for="textInput">Text</label>
+                    <input type="text" id="textInput" name="text" placeholder="Enter logo text..." required
+                        autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label>Geometry Mode</label>
+                    <div class="radio-group">
+                        <label class="radio-card">
+                            <input type="radio" name="mode" value="square" checked>
+                            <span class="radio-content">Square</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="mode" value="circle">
+                            <span class="radio-content">Circle</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="mode" value="polygon">
+                            <span class="radio-content">Polygon</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="toggles-group">
+                    <label class="toggle-card">
+                        <span class="toggle-label">Auto-generate</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="autoGenerateToggle" checked>
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+
+                    <label class="toggle-card">
+                        <span class="toggle-label">Add Frame</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" name="add_frame">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+
+                    <label class="toggle-card">
+                        <span class="toggle-label">Overlay Text</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" name="add_text">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+
+                    <label class="toggle-card">
+                        <span class="toggle-label">Random Colors</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" name="random_colors" checked>
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+
+                    <label class="toggle-card">
+                        <span class="toggle-label">Empty Spaces</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" name="empty_spaces" checked>
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+
+                    <label class="toggle-card">
+                        <span class="toggle-label">Transparent Background</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" name="transparent_background">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+
+                    <label class="toggle-card">
+                        <span class="toggle-label">Transparent Text</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" name="transparent_text">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                </div>
+
+                <button type="submit" class="primary-btn generate-btn">
+                    <span>Generate Logo</span>
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13.75 6.75L19.25 12L13.75 17.25M19 12H4.75"></path>
+                    </svg>
+                </button>
+            </form>
+        </aside>
+
+        <section class="preview-area">
+            <div class="preview-header">
+                <h2>Preview</h2>
+                <div class="save-actions">
+                    <button id="saveBtn" class="secondary-btn save-btn" disabled>
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.75V19.25M12 19.25L6.75 14M12 19.25L17.25 14"></path>
+                        </svg>
+                        <span>Save SVG</span>
+                    </button>
+                    <button id="savePngBtn" class="secondary-btn save-btn" disabled>
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        <span>Save PNG</span>
+                    </button>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <div id="svgContainer" class="svg-container">
+                    <div class="empty-state">
+                        <div class="shapes-placeholder">
+                            <div class="shape s1"></div>
+                            <div class="shape s2"></div>
+                            <div class="shape s3"></div>
+                        </div>
+                        <p>Generate a logo to see it here</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
