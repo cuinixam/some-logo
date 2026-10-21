@@ -1,6 +1,6 @@
 [project]
 name = "some-logo"
-version = "0.0.0"
+version = "0.1.0"
 description = "Generate some logo from text when I am too lazy to design a logo myself."
 readme = "README.md"
 license = "MIT"
