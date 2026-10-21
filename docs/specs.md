@@ -21,6 +21,13 @@ The application supports different geometric modes for representing each letter 
 - **Circle Mode**:
   - Represents each letter as a circle instead of a square.
   - The inner circles are placed inside a larger, encompassing outer circle boundary.
+- **PM5544 Mode**:
+  - Draws a simplified Philips PM5544 TV test card: a circle on a grey background with a white grid.
+  - Each letter becomes one vertical colour bar; the bars run across the middle of the circle.
+  - The bars cycle through the card's six colours (yellow, cyan, green, magenta, red, blue) instead of ASCII-derived colours. Random colors still apply.
+  - With letter inclusion enabled, the whole text is rendered in a black box below the bars.
+  - Under the text box, a row of grey steps shows each letter's ASCII-derived (or random) color converted to grayscale.
+  - The frame option outlines the circle and every bar and step in black, also with transparent backgrounds.
 
 ### 3. Coloring Generation
 

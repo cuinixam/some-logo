@@ -18,6 +18,7 @@ class GeometryMode(str, Enum):
     SQUARE = "square"
     CIRCLE = "circle"
     POLYGON = "polygon"
+    PM5544 = "pm5544"
 
 
 @dataclass

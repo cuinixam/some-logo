@@ -92,6 +92,25 @@ def test_svg_output_is_valid_xml_snippet() -> None:
     assert svg.strip().endswith("</svg>")
 
 
+def test_pm5544_mode_draws_card_colors_text_box_and_grey_steps() -> None:
+    opts = _make_options(text="TESTCARD", mode=GeometryMode.PM5544, add_text=True)
+    shapes = generate_shapes("TESTCARD", opts)
+    svg = generate_svg(shapes, opts)
+    assert '<clipPath id="pm5544-circle">' in svg
+    assert svg.count("<rect") == 1 + 8 + 8 + 1
+    assert svg.count('fill="rgb(191,191,0)"') == 2
+    assert 'fill="rgb(140,140,140)"' in svg
+    assert 'fill="black"' in svg
+    assert ">TESTCARD</text>" in svg
+
+
+@pytest.mark.parametrize("transparent", [False, True])
+def test_pm5544_frame_outlines_every_bar_and_step_in_black(transparent: bool) -> None:
+    opts = LogoOptions(text="ab", mode=GeometryMode.PM5544, add_frame=True, transparent_background=transparent)
+    svg = generate_svg(generate_shapes("ab", opts), opts)
+    assert svg.count('stroke="black" stroke-width="2"/>') == 4 + 1
+
+
 def test_polygon_mode_produces_polygon_elements() -> None:
     opts = _make_options(mode=GeometryMode.POLYGON)
     shapes = generate_shapes("ab", opts)

@@ -72,7 +72,7 @@ uvx some-logo run "MY TEXT"
 
 #### CLI Options
 
-- `--mode [square|circle|polygon]`: Geometry mode (default: `square`)
+- `--mode [square|circle|polygon|pm5544]`: Geometry mode (default: `square`). `pm5544` draws a simplified Philips PM5544 TV test card: a circle on a grey grid, one colour bar per character in the card's six colours (or random colours with `--random`), with `--text` the text in a black box below the bars, and under it a row of grey steps showing each character's own color in grayscale. With `--frame`, every bar and step also gets a black outline.
 - `--frame / --no-frame`: Add an outer frame around the shapes
 - `--text / --no-text`: Render each character inside its shape
 - `--random / --no-random`: Use random colors instead of ASCII-derived ones

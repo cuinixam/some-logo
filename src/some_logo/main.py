@@ -36,7 +36,7 @@ def version(
 @time_it("run")
 def run(
     text: Annotated[str, typer.Argument(help="Input text to generate the logo from.")],
-    mode: Annotated[GeometryMode, typer.Option("--mode", "-m", help="Geometry mode: square or circle.")] = GeometryMode.SQUARE,
+    mode: Annotated[GeometryMode, typer.Option("--mode", "-m", help="Geometry mode: square, circle, polygon or pm5544.")] = GeometryMode.SQUARE,
     frame: Annotated[bool, typer.Option("--frame/--no-frame", help="Add an outer frame around the shapes.")] = False,
     overlay_text: Annotated[bool, typer.Option("--text/--no-text", help="Render each character inside its shape.")] = False,
     random_colors: Annotated[bool, typer.Option("--random/--no-random", help="Use random colors instead of ASCII-derived ones.")] = False,

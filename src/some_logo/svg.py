@@ -9,6 +9,9 @@ _PADDING = 20
 _SHAPE_SIZE = 80
 _TEXT_FONT_SIZE = 56
 
+# The six colour bars of the real PM5544 card, at 75 % amplitude
+_PM5544_COLORS = [(191, 191, 0), (0, 191, 191), (0, 191, 0), (191, 0, 191), (191, 0, 0), (0, 0, 191)]
+
 
 def _rgb_to_css(color: tuple[int, int, int]) -> str:
     return f"rgb({color[0]},{color[1]},{color[2]})"
@@ -20,6 +23,8 @@ def generate_svg(shapes: list[Shape], options: LogoOptions) -> str:
         return _render_square_layout(shapes, options)
     if options.mode == GeometryMode.POLYGON:
         return _render_polygon_layout(shapes, options)
+    if options.mode == GeometryMode.PM5544:
+        return _render_pm5544_layout(shapes, options)
     return _render_circle_layout(shapes, options)
 
 
@@ -178,6 +183,77 @@ def _render_polygon_layout(shapes: list[Shape], options: LogoOptions) -> str:
                 elements.append(_text(shape.character, text_x, text_y, options))
 
     return _svg_document(total_size, total_size, elements)
+
+
+# ---------------------------------------------------------------------------
+# PM5544 mode
+# ---------------------------------------------------------------------------
+
+
+def _render_pm5544_layout(shapes: list[Shape], options: LogoOptions) -> str:
+    """Render a simplified Philips PM5544 test card: colour bars, a black text box and grey steps across a circle."""
+    count = len(shapes)
+    if count == 0:
+        return _svg_document(2 * _PADDING, 2 * _PADDING, [])
+
+    # The minimum radius keeps the text box of short texts inside the circle
+    radius = max(_SHAPE_SIZE * 1.5, count * _SHAPE_SIZE * 0.4)
+    total_size = 2 * radius + 2 * _PADDING
+    cx = cy = total_size / 2
+    bar_width = 2 * radius / count
+    # Colour bars above and grey steps below the centred text box, mirrored and of equal height
+    box_height = _TEXT_FONT_SIZE + _PADDING
+    band_height = radius * 0.45
+    bars_top = cy - box_height / 2 - _PADDING / 2 - band_height
+    steps_top = cy + box_height / 2 + _PADDING / 2
+
+    # White grid lines on grey, with one line through the centre like the real card
+    grid_step = radius / 4
+    offsets = [cx + step * grid_step for step in range(-6, 7)]
+    grid_path = " ".join(f"M{offset:.1f} 0V{total_size:.1f}M0 {offset:.1f}H{total_size:.1f}" for offset in offsets)
+
+    elements: list[str] = [
+        _rect(0, 0, total_size, total_size, fill="rgb(128,128,128)"),
+        f'<path d="{grid_path}" stroke="white" stroke-width="2"/>',
+        _circle(cx, cy, radius, fill="white"),
+        f'<clipPath id="pm5544-circle">{_circle(cx, cy, radius, fill="white")}</clipPath>',
+    ]
+
+    bars: list[str] = []
+    for index, shape in enumerate(shapes):
+        if shape.is_empty:
+            continue
+        x_pos = cx - radius + index * bar_width
+        bar_color = shape.color if options.random_colors else _PM5544_COLORS[index % len(_PM5544_COLORS)]
+        bars.append(_band(x_pos, bars_top, bar_width, band_height, bar_color, options))
+        bars.append(_band(x_pos, steps_top, bar_width, band_height, _grayscale(shape.color), options))
+    elements.append(f'<g clip-path="url(#pm5544-circle)">{"".join(bars)}</g>')
+
+    if options.add_frame:
+        elements.append(_circle(cx, cy, radius, "none", stroke="black", stroke_width=2))
+
+    if options.add_text:
+        box_width = count * _TEXT_FONT_SIZE * 0.6 + _PADDING
+        elements.append(_rect(cx - box_width / 2, cy - box_height / 2, box_width, box_height, fill="black"))
+        elements.append(_text("".join(shape.character for shape in shapes), cx, cy, options))
+
+    return _svg_document(total_size, total_size, elements)
+
+
+def _band(x: float, y: float, width: float, height: float, color: tuple[int, int, int], options: LogoOptions) -> str:
+    """With a frame every bar and step gets a black outline, also when transparent."""
+    fill = "none" if options.transparent_background else _rgb_to_css(color)
+    if options.add_frame:
+        return _rect(x, y, width, height, fill=fill, stroke="black", stroke_width=2)
+    if options.transparent_background:
+        return _rect(x, y, width, height, fill=fill, stroke=_rgb_to_css(color), stroke_width=2)
+    return _rect(x, y, width, height, fill=fill)
+
+
+def _grayscale(color: tuple[int, int, int]) -> tuple[int, int, int]:
+    """Convert to grey with the ITU-R BT.601 luma weights that PAL television uses."""
+    luma = round(0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2])
+    return luma, luma, luma
 
 
 # ---------------------------------------------------------------------------
