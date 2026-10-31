@@ -3,7 +3,7 @@
 import colorsys
 import secrets
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 
 import grapheme
 
@@ -12,7 +12,7 @@ _ASCII_MAX = 126  # tilde (~)
 _ASCII_RANGE = _ASCII_MAX - _ASCII_MIN
 
 
-class GeometryMode(str, Enum):
+class GeometryMode(StrEnum):
     """The geometric shape used to represent each character."""
 
     SQUARE = "square"
